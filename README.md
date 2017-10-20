@@ -1,76 +1,80 @@
-# Git Style Guide
+# Guía de estilo para Git
 
-This is a Git Style Guide inspired by [*How to Get Your Change Into the Linux
-Kernel*](https://kernel.org/doc/html/latest/process/submitting-patches.html),
-the [git man pages](http://git-scm.com/doc) and various practices popular
-among the community.
+Esta guía de estilo para Git esta inspirada por [*How to Get Your Change 
+Into the Linux Kernel*](https://www.kernel.org/doc/documentation/submittingpatches.html),
+las páginas del [manual de git](http://git-scm.com/doc) y varias 
+prácticas ahora actualmente populares dentro de la comunidad.
 
-Translations are available in the following languages:
+Traducciones para esta guía están en disponibles en los siguientes 
+idiomas:
 
-* [Chinese (Simplified)](https://github.com/aseaday/git-style-guide)
-* [Chinese (Traditional)](https://github.com/JuanitoFatas/git-style-guide)
-* [French](https://github.com/pierreroth64/git-style-guide)
-* [German](https://github.com/runjak/git-style-guide)
-* [Greek](https://github.com/grigoria/git-style-guide)
-* [Japanese](https://github.com/objectx/git-style-guide)
-* [Korean](https://github.com/ikaruce/git-style-guide)
-* [Portuguese](https://github.com/guylhermetabosa/git-style-guide)
-* [Russian](https://github.com/alik0211/git-style-guide)
-* [Thai](https://github.com/zondezatera/git-style-guide)
-* [Turkish](https://github.com/CnytSntrk/git-style-guide)
-* [Ukrainian](https://github.com/denysdovhan/git-style-guide)
+* [Alemán](https://github.com/runjak/git-style-guide)
+* [Chino Simplificado](https://github.com/aseaday/git-style-guide)
+* [Chino Tradicional](https://github.com/JuanitoFatas/git-style-guide)
+* [Coreano](https://github.com/ikaruce/git-style-guide)
+* [Francés](https://github.com/pierreroth64/git-style-guide)
+* [Griego](https://github.com/grigoria/git-style-guide)
+* [Japonés](https://github.com/objectx/git-style-guide)
+* [Portugués](https://github.com/guylhermetabosa/git-style-guide)
+* [Ruso](https://github.com/alik0211/git-style-guide)
+* [Tailandés](https://github.com/zondezatera/git-style-guide)
+* [Turco](https://github.com/CnytSntrk/git-style-guide)
+* [Ucraniano](https://github.com/denysdovhan/git-style-guide)
 
-If you feel like contributing, please do so! Fork the project and open a pull
+Si deseas contribuir, hazle un fork al proyecto e inicia un pull 
 request.
 
-# Table of contents
+# Tabla de contenido
 
 1. [Branches](#branches)
 2. [Commits](#commits)
-  1. [Messages](#messages)
+  1. [Mensajes](#mensajes)
 3. [Merging](#merging)
 4. [Misc.](#misc)
 
 ## Branches
 
-* Choose *short* and *descriptive* names:
+* Usa nombres *cortos* y *descriptivos* para tus ramas o branches:
 
   ```shell
-  # good
-  $ git checkout -b oauth-migration
+  # bien
+  $ git checkout -b migracion_de_api
 
-  # bad - too vague
-  $ git checkout -b login_fix
+  # mal - poco descriptivo
+  $ git checkout -b simple_arreglo
   ```
 
-* Identifiers from corresponding tickets in an external service (eg. a GitHub
-  issue) are also good candidates for use in branch names. For example:
+* Identificadores correspondientes a problemas, tickets, o issues de un 
+servicio externo como aquellos de Github pueden ser usados para nombrar
+tus branches. Por ejemplo:
 
   ```shell
-  # GitHub issue #15
+  # GitHub Issue #15
   $ git checkout -b issue-15
   ```
 
-* Use *hyphens* to separate words.
+* Usa *guiones* para separar palabras.
 
-* When several people are working on the *same* feature, it might be convenient
-  to have *personal* feature branches and a *team-wide* feature branch.
-  Use the following naming convention:
+* Si existen varias personas trabajando en la misma parte, 
+  característica o feature del proyecto, puede ser conveniente tener un 
+  branch para todo el equipo y otros branches *personales* para cada 
+  persona.
 
   ```shell
-  $ git checkout -b feature-a/master # team-wide branch
-  $ git checkout -b feature-a/maria  # Maria's personal branch
-  $ git checkout -b feature-a/nick   # Nick's personal branch
+  $ git checkout -b feature-a/master # Branch del equipo entero
+  $ git checkout -b feature-a/maria  # Branch personal de María
+  $ git checkout -b feature-a/nick   # Branch personal de Nick
   ```
 
-  Merge at will the personal branches to the team-wide branch (see ["Merging"](#merging)).
-  Eventually, the team-wide branch will be merged to "master".
+  Se pueden hacer integraciones o merges desde las ramas/branches 
+  personales al branch del equipo (ver ["Merging"](#merging)).
+  Eventualmente, el branch del equipo será integrado a "master".
 
-* Delete your branch from the upstream repository after it's merged, unless
-  there is a specific reason not to.
+* Elimina tu branch del repositorio remoto después de haber sido 
+  integrado a menos que sea necesario guardarlo.
 
-  Tip: Use the following command while being on "master", to list merged
-  branches:
+  Consejo: Usa el comando a continuación desde "master" para mostrar 
+  branches integrados:
 
   ```shell
   $ git branch --merged | grep -v "\*"
@@ -78,198 +82,211 @@ request.
 
 ## Commits
 
-* Each commit should be a single *logical change*. Don't make several
-  *logical changes* in one commit. For example, if a patch fixes a bug and
-  optimizes the performance of a feature, split it into two separate commits.
+* Cada commit debe de estar compuesto por un solo *cambio lógico*. No 
+debes de tener varios *cambios lógicos* en un commit. Por ejemplo, si 
+un cambio corrige un error y, a la vez, optimiza el rendimiento de un 
+aspecto de la aplicación, debes separarlo en dos commits.
+  *Consejo: Usa `git add-p` para interactivamente montar/stage 
+  partes específicas de los archivos modificados.*
 
-  *Tip: Use `git add -p` to interactively stage specific portions of the
-  modified files.*
+* No separes un solo *cambio lógico* en varios commits. Por ejemplo, una 
+nueva implementación junto con sus pruebas o tests correspondientes 
+deben de estar en el mismo commit.
 
-* Don't split a single *logical change* into several commits. For example,
-  the implementation of a feature and the corresponding tests should be in the
-  same commit.
+* Realiza commits *temprano* y *frecuentemente*. Commits que son 
+pequeños y autónomos son más fáciles de entender y revertir si algo sale
+mal.
 
-* Commit *early* and *often*. Small, self-contained commits are easier to
-  understand and revert when something goes wrong.
+* Los commits deben de ser ordenados *lógicamente*. Por ejemplo, 
+si el *commit A* depende de los cambios hechos en *commit B*, entonces, 
+el *commit B* debe de realizarse antes del *commit A*.
 
-* Commits should be ordered *logically*. For example, if *commit X* depends
-  on changes done in *commit Y*, then *commit Y* should come before *commit X*.
+### Mensajes
 
-Note: While working alone on a local branch that *has not yet been pushed*, it's
-fine to use commits as temporary snapshots of your work. However, it still
-holds true that you should apply all of the above *before* pushing it.
-
-### Messages
-
-* Use the editor, not the terminal, when writing a commit message:
+* Usa tu editor y no tu terminal cuando escribes un mensaje para el 
+  commit. Realizar commits desde la terminal te hace pensar que es 
+  necesario hacer que quepa todo en una sola linea lo cual usualmente 
+  resulta en mensajes ambiguos y poco informativos.
 
   ```shell
-  # good
+  # bien
   $ git commit
 
-  # bad
-  $ git commit -m "Quick fix"
+  # mal
+  $ git commit -m "Correción rápida"
   ```
 
-  Committing from the terminal encourages a mindset of having to fit everything
-  in a single line which usually results in non-informative, ambiguous commit
-  messages.
-
-* The summary line (ie. the first line of the message) should be
-  *descriptive* yet *succinct*. Ideally, it should be no longer than
-  *50 characters*. It should be capitalized and written in imperative present
-  tense. It should not end with a period since it is effectively the commit
-  *title*:
+* La línea de resumen, es decir, la primera linea del mensaje de commit,
+  debe ser *descriptiva* y al igual *concisa*. Idealmente, esta línea 
+  no debe de tener más de *50 caracteres*. Debe de hacer uso correcto de
+  mayúsculas y también debe ser escrita en el imperativo. No es 
+  necesario que termine en punto final puesto que sirve como el *título*
+  del commit.
 
   ```shell
-  # good - imperative present tense, capitalized, fewer than 50 characters
-  Mark huge records as obsolete when clearing hinting faults
+  # bien - modo imperativo, usa mayúsculas y tiene menos de 50 caracteres
+  Marcar registros como obsoletos tras falla
 
-  # bad
-  fixed ActiveModel::Errors deprecation messages failing when AR was used outside of Rails.
+  # malo
+  arreglé ActiveModel::Mensajes de error cuando AR fue usado correctamente fuera de Rails
   ```
 
-* After that should come a blank line followed by a more thorough
-  description. It should be wrapped to *72 characters* and explain *why*
-  the change is needed, *how* it addresses the issue and what *side-effects*
-  it might have.
+* Después del título debe ir una línea en blanco seguida por una 
+descripción más a fondo del commit. Cada línea debe de tener 72 
+caracteres o menos y debe de explicar la *razón* por la cual el cambio 
+era necesario. Preguntas acerca de cómo el cambio tomó lugar son 
+respondidas por el cambio en sí y sus efectos. El mensaje también debe 
+de vincular otros recursos relacionados como el número de un issue
+correspondiente:
 
-  It should also provide any pointers to related resources (eg. link to the
-  corresponding issue in a bug tracker):
-
-  ```text
-  Short (50 chars or fewer) summary of changes
-
-  More detailed explanatory text, if necessary. Wrap it to
-  72 characters. In some contexts, the first
-  line is treated as the subject of an email and the rest of
-  the text as the body.  The blank line separating the
-  summary from the body is critical (unless you omit the body
-  entirely); tools like rebase can get confused if you run
-  the two together.
-
-  Further paragraphs come after blank lines.
-
-  - Bullet points are okay, too
-
-  - Use a hyphen or an asterisk for the bullet,
-    followed by a single space, with blank lines in
-    between
-
-  The pointers to your related resources can serve as a footer 
-  for your commit message. Here is an example that is referencing 
-  issues in a bug tracker:
+  ```shell
+  Resumen corto de no más de 50 caracteres.
   
-  Resolves: #56, #78
-  See also: #12, #34
+  Texto opcional detallando aspectors del cambio en el commit donde
+  cada linea debe tener un máximo de 72 caracteres.
 
-  Source http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+  Recuerda que si decides incluír texto despues del título, la linea 
+  en blanco entre el título y el cuerpo es necesaria. Esto es debido
+  a que herramientas como rebase se pueden confundir si juntas el
+  título de un commit con su cuerpo.
+  
+  En ciertas situaciones, la primera linea del mensaje se 
+  trata como el asunto de un correo electrónico y el resto del mensaje 
+  como su cuerpo.
+  
+  Párrafos adicionaes vienen despues de líneas en blanco.
+  
+  - Se pueden crear listas con guiones o asteriscos.
+  
+  * Esta lista empieza con un asterisco y un espacio y espera líneas
+  en blanco entre artículos de la lista.
+  
+  Vínculos a recursos relacionados pueden ser agregados al final del
+  mensaje:
+  
+  Corrige: #56, #78
+  Véase también: #12, #34
+
+  Fuente http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
   ```
 
-  Ultimately, when writing a commit message, think about what you would need
-  to know if you run across the commit in a year from now.
+  Al final cuando escribes el mensaje de un commit, piensa sobre qué 
+  necesitarías saber si te encuentras con este commit después de un año.
 
-* If a *commit A* depends on *commit B*, the dependency should be
-  stated in the message of *commit A*. Use the SHA1 when referring to
-  commits.
+* Si un *commit A* depende de *commit B*, la dependencia debe de ser
+  escrita en el mensaje de *commit A* refiriéndote a *commit B* por su 
+  respectivo hash.
 
-  Similarly, if *commit A* solves a bug introduced by *commit B*, it should
-  also be stated in the message of *commit A*.
-
-* If a commit is going to be squashed to another commit use the `--squash` and
-  `--fixup` flags respectively, in order to make the intention clear:
+  Similarmente, si un *commit A* corrige un problema introducido por 
+  *commit B*, éste también debe ser escrito en el mensaje de *commit A*.
+  
+* Si un commit ha de entrar al proceso de squash con respecto a otro,
+debe ser escrito como tal para hacer la intención clara:
 
   ```shell
   $ git commit --squash f387cab2
   ```
 
-  *(Tip: Use the `--autosquash` flag when rebasing. The marked commits will be
-  squashed automatically.)*
+ *(Consejo: Usa `--autosquash` al realizar un rebase. Los commits 
+ marcados entraran al procesa de squash automáticamente.)*
 
 ## Merging
 
-* **Do not rewrite published history.** The repository's history is valuable in
-  its own right and it is very important to be able to tell *what actually
-  happened*. Altering published history is a common source of problems for
-  anyone working on the project.
+* **No re-escribas el historial ya publicado.** El historial de un 
+repositorio es muy valioso ya que muy importante poder saber 
+*qué ocurrió exactamente* en un momento dado. Alteraciones al historial
+es una fuente común de errores en muchos proyectos.
 
-* However, there are cases where rewriting history is legitimate. These are
-  when:
+* Sin embargo, existen casos legítimos en los cuales reescribir el
+historial es aceptable. Estos casos son cuando:
 
-  * You are the only one working on the branch and it is not being reviewed.
+   * Tú eres el único trabajando en el branch y el branch no será
+   revisado.
+   
+   * Tú quieres reorganizar tu branch (p. ej. squash commits) y/o 
+   hacer un rebase de tu branch con respecto a "master".
 
-  * You want to tidy up your branch (eg. squash commits) and/or rebase it onto
-    the "master" in order to merge it later.
+   Con esto dicho, *nunca re-escribas la historia del branch "master"*
+   o de cualquier otro branch especial como aquellos usados en 
+   producción o en los servidores.
 
-  That said, *never rewrite the history of the "master" branch* or any other
-  special branches (ie. used by production or CI servers).
+* Mantén el historial *limpio* y *simple*. *Antes de someter tu branch 
+  a un merge*:
+  
+    1. Asegúrate que se acomoda a la guía de estilo escogida para el
+    proyecto.
+    
+    2. Haz un rebase con respecto al branch que ha de recibir el merge:
 
-* Keep the history *clean* and *simple*. *Just before you merge* your branch:
+       ```shell
+       [mi-branch] $ git fetch
+       [mi-branch] $ git rebase origin/master
+       # Ahora haz el merge
+       ```
 
-    1. Make sure it conforms to the style guide and perform any needed actions
-       if it doesn't (squash/reorder commits, reword messages etc.)
+       Esto resulta en un branch que puede ser directamente aplicado al 
+       final del branch "master" lo cual simplifica el historial del 
+       proyecto.
 
-    2. Rebase it onto the branch it's going to be merged to:
-
-      ```shell
-      [my-branch] $ git fetch
-      [my-branch] $ git rebase origin/master
-      # then merge
-      ```
-
-      This results in a branch that can be applied directly to the end of the
-      "master" branch and results in a very simple history.
-
-      *(Note: This strategy is better suited for projects with short-running
-      branches. Otherwise it might be better to occassionally merge the
-      "master" branch instead of rebasing onto it.)*
-
-* If your branch includes more than one commit, do not merge with a
+       *(Nota: Esta estrategia es más adecuada para proyectos con 
+       branches de corta duración. Si no es así, es posible que sea 
+       mejor ocasionalmente hacer un merge en vez de un rebase con la 
+       branch "master").*
+       
+* Si tu branch incluye más de un commit, no hagas un merge con 
   fast-forward:
 
   ```shell
-  # good - ensures that a merge commit is created
-  $ git merge --no-ff my-branch
+  # bien - asegura que un commit del merge sea creado
+  $ git merge --no-ff mi-branch
 
-  # bad
-  $ git merge my-branch
+  # mal
+  $ git merge mi-branch
   ```
 
 ## Misc.
 
-* There are various workflows and each one has its strengths and weaknesses.
-  Whether a workflow fits your case, depends on the team, the project and your
-  development procedures.
+* Existen varios estilos, flujos de trabajo o workflows y cada uno tiene
+  sus ventajas y desventajas. El hecho de que un flujo encaje con un
+  proyecto en específico depende del equipo, de aspectos del proyecto 
+  en sí y de sus procesos de desarrollo. *Lo que es importante es poder 
+  escoger un estilo y usarlo a través del proyecto.*
+  
+* *Sé consistente.* Esto es relacionado con el estilo pero ha de 
+  expandirse a cosas como mensajes de commit, nombres de tus branches y 
+  etiquetas/tags. El tener un estilo constante en el repositorio 
+  facilita su entendimiento a través del log y de los mensajes de 
+  sus commits.
 
-  That said, it is important to actually *choose* a workflow and stick with it.
+* *Prueba/haz tests antes del push*. No hagas un push con un trabajo no 
+  terminado.
 
-* *Be consistent.* This is related to the workflow but also expands to things
-  like commit messages, branch names and tags. Having a consistent style
-  throughout the repository makes it easy to understand what is going on by
-  looking at the log, a commit message etc.
-
-* *Test before you push.* Do not push half-done work.
-
-* Use [annotated tags](http://git-scm.com/book/en/v2/Git-Basics-Tagging#Annotated-Tags)
-  for marking releases or other important points in the history. Prefer
-  [lightweight tags](http://git-scm.com/book/en/v2/Git-Basics-Tagging#Lightweight-Tags)
-  for personal use, such as to bookmark commits for future reference.
-
-* Keep your repositories at a good shape by performing maintenance tasks
-  occasionally:
+* Usa [Tags Anotadas](http://git-scm.com/book/en/v2/Git-Basics-Tagging#Annotated-Tags) 
+ para marcar lanzamientos/releases u otros puntos importantes en el 
+ historial.
+  
+* Usa [Tags Ligeras](http://git-scm.com/book/en/v2/Git-Basics-Tagging#Lightweight-Tags) 
+  para uso personal, como para marcar commits y facilitar su búsqueda 
+  en el futuro.
+  
+* Mantén tus repositorios en buenas condiciones al hacerles 
+  mantenimiento ocasionalmente:
 
   * [`git-gc(1)`](http://git-scm.com/docs/git-gc)
   * [`git-prune(1)`](http://git-scm.com/docs/git-prune)
   * [`git-fsck(1)`](http://git-scm.com/docs/git-fsck)
 
-# License
+# Licencia
 
 ![cc license](http://i.creativecommons.org/l/by/4.0/88x31.png)
 
-This work is licensed under a [Creative Commons Attribution 4.0
+Este trabajo está licenciado bajo la licencia [Creative Commons Attribution 4.0
 International license](https://creativecommons.org/licenses/by/4.0/).
 
-# Credits
+# Créditos
 
 Agis Anastasopoulos / [@agisanast](https://twitter.com/agisanast) / http://agis.io
-... and [contributors](https://github.com/agis-/git-style-guide/graphs/contributors)!
+
+# Traducción
+Johnny Ruiz / [jeko2000](https://github.com/jeko2000)
+
